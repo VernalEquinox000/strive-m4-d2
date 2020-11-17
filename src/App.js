@@ -11,7 +11,7 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <NavBar title="Strive Library" color={"red"} />
+        <NavBar title="Strive Library" backgroundColor={"red"} />
 
         <Welcome title="our library!"/>
         
