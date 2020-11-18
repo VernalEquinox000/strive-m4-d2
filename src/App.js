@@ -3,8 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
 import NavBar from "./components/navbar"
-//import myFooter from "./components/myfooter"
 import Welcome from "./components/welcome"
+import Footer from "./components/myfooter"
+import Books from "./components/books"
 
 
 class App extends React.Component {
@@ -15,8 +16,9 @@ class App extends React.Component {
 
         <Welcome title="our library!"/>
         
-       
-        
+        <Books />
+
+        <Footer />
         
       </>
     );

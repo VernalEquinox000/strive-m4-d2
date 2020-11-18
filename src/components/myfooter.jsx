@@ -1,12 +1,15 @@
- import React from "react";
+import React from "react";
+ import {Container, Row, Col} from "react-bootstrap"
 
-const myFooter = () => {
+const Footer = () => {
     return (
-
-    <footer>
-        This is a footer
-    </footer>
+        <div className="Footer bg-dark text-light">
+            <p>Strive Library Corp, all right reserved</p>
+            </div>
+            
+        
+            
     )
 } 
 
-export default myFooter
+export default Footer

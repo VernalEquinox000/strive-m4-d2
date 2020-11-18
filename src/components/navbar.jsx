@@ -5,7 +5,7 @@ const NavBar = (props) => {
 
     return (
         <div>
-    <Navbar bg={props.backgroundColor} expand="lg">
+    <Navbar bg="secondary" variant="dark">
                 <Navbar.Brand href="#home">
                     {props.title}
         </Navbar.Brand>
