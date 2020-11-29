@@ -67,13 +67,11 @@ export default class LatestRelease extends Component {
                             <Col>
                                 <Card className="mb-3" style={{ width: "250px", height: "450px" }} key={book.asin}>
                                     <Card.Img variant="top" style={{ height: "250px", objectFit: "cover" }} src={book.img} />
-  <Card.Body>
-    <Card.Title>{book.title} </Card.Title>
-    <Card.Text>
-                                            {book.title} | {book.price}  
-    </Card.Text>
-  </Card.Body>
-</Card>
+                                    <Card.Body>
+                                        <Card.Title>{book.title} </Card.Title>
+                                        <Card.Text>{book.title} | {book.price}</Card.Text>
+                                    </Card.Body>
+                                </Card>
                             </Col>
                         )} 
                            
