@@ -2,24 +2,21 @@ import React from "react"
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
-import NavBar from "./components/navbar"
-import Welcome from "./components/welcome"
-import Footer from "./components/myfooter"
-import Books from "./components/books"
+import MyNavBar from "./components/MyNavBar"
+import Welcome from "./components/Welcome"
+import MyFooter from "./components/MyFooter"
+import LatestRelease from "./components/LatestRelease"
+//import Books from "./components/books"
 
 
 class App extends React.Component {
   render() {
     return (
       <>
-        <NavBar title="Strive Library" backgroundColor={"red"} />
-
+        <MyNavBar title="Strive Library" />
         <Welcome title="our library!"/>
-        
-        <Books />
-
-        <Footer />
-        
+        <LatestRelease/>
+        <MyFooter />
       </>
     );
   }
