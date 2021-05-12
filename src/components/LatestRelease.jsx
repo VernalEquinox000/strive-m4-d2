@@ -17,6 +17,14 @@ let categories = ["fantasy", "history", "horror", "romance", "scifi"];
 export default function LatestRelease() {
   const [category, setCategory] = useState("Fantasy");
   const [books, setBooks] = useState(Fantasy);
+  function handleChange(e) {
+    setCategory(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(category);
+  }
   /* chooseCategory = (category) => {
         category === value;
         this.setState({ chooseCategory: category });
@@ -28,33 +36,54 @@ export default function LatestRelease() {
     <>
       <Container>
         <Row>
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+          {/* <form onSubmit={handleSubmit}>
+            <h2>Choose your framework</h2>
+            <select onChange={handleChange} value={category}>
+              <option value="react">React</option>
+              <option value="angular">Angular</option>
+              <option value="vue">Vue</option>
+            </select>
+            <button type="submit">Submit</button>
+          </form> */}
+          <Dropdown onSubmit={handleSubmit}>
+            <Dropdown.Toggle
+              variant="primary"
+              id="dropdown-basic"
+              onChange={handleChange}
+              value={category}
+            >
               Choose a Category
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
               <Dropdown.Item
-                onClick={(setBooks(Fantasy), setCategory("Fantasy"))}
+                value="Fantasy"
+                /* onClick={(setBooks(Fantasy), setCategory("Fantasy"))} */
               >
                 Fantasy
               </Dropdown.Item>
               <Dropdown.Item
-                onClick={(setBooks(History), setCategory("History"))}
+                value="History"
+                /* onClick={(setBooks(History), setCategory("History"))} */
               >
                 History
               </Dropdown.Item>
               <Dropdown.Item
-                onClick={(setBooks(Horror), setCategory("Horror"))}
+                value="Horror"
+                /* onClick={(setBooks(Horror), setCategory("Horror"))} */
               >
                 Horror
               </Dropdown.Item>
               <Dropdown.Item
-                onClick={(setBooks(Romance), setCategory("Romance"))}
+                value="Romance"
+                /* onClick={(setBooks(Romance), setCategory("Romance"))} */
               >
                 Romance
               </Dropdown.Item>
-              <Dropdown.Item onClick={(setBooks(Scifi), setCategory("Scifi"))}>
+              <Dropdown.Item
+                value="Scifi"
+                /*  onClick={(setBooks(Scifi), setCategory("Scifi"))} */
+              >
                 Scifi
               </Dropdown.Item>
             </Dropdown.Menu>
