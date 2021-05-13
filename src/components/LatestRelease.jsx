@@ -17,14 +17,25 @@ let categories = ["fantasy", "history", "horror", "romance", "scifi"];
 export default function LatestRelease() {
   const [category, setCategory] = useState("Fantasy");
   const [books, setBooks] = useState(Fantasy);
+  function booksChange(category) {
+    if (category === "Fantasy") setBooks(Fantasy);
+    else if (category === "History") setBooks(History);
+    else if (category === "Horror") setBooks(Horror);
+    else if (category === "Romance") setBooks(Romance);
+    else if (category === "Scifi") setBooks(Scifi);
+    else alert("no books selected");
+  }
+
   function handleChange(e) {
     setCategory(e.target.value);
+    booksChange(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     console.log(category);
   }
+
   /* chooseCategory = (category) => {
         category === value;
         this.setState({ chooseCategory: category });
@@ -36,58 +47,17 @@ export default function LatestRelease() {
     <>
       <Container>
         <Row>
-          {/* <form onSubmit={handleSubmit}>
-            <h2>Choose your framework</h2>
+          <form onSubmit={handleSubmit}>
+            <h2>Choose your category</h2>
             <select onChange={handleChange} value={category}>
-              <option value="react">React</option>
-              <option value="angular">Angular</option>
-              <option value="vue">Vue</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="History">History</option>
+              <option value="Horror">Horror</option>
+              <option value="Romance">Romance</option>
+              <option value="Scifi">Scifi</option>
             </select>
             <button type="submit">Submit</button>
-          </form> */}
-          <Dropdown onSubmit={handleSubmit}>
-            <Dropdown.Toggle
-              variant="primary"
-              id="dropdown-basic"
-              onChange={handleChange}
-              value={category}
-            >
-              Choose a Category
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                value="Fantasy"
-                /* onClick={(setBooks(Fantasy), setCategory("Fantasy"))} */
-              >
-                Fantasy
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="History"
-                /* onClick={(setBooks(History), setCategory("History"))} */
-              >
-                History
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Horror"
-                /* onClick={(setBooks(Horror), setCategory("Horror"))} */
-              >
-                Horror
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Romance"
-                /* onClick={(setBooks(Romance), setCategory("Romance"))} */
-              >
-                Romance
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Scifi"
-                /*  onClick={(setBooks(Scifi), setCategory("Scifi"))} */
-              >
-                Scifi
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          </form>
 
           {/* <label for="category">Choose a category:</label>
                             <select name="categories" id="categories" form="catform">
