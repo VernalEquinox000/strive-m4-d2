@@ -48,6 +48,12 @@ export default function LatestRelease() {
     booksChange(e);
   };
 
+  const fetchPokemon = async () => {
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon/");
+    const data = await response.json();
+    console.log(data);
+  };
+
   /* chooseCategory = (category) => {
         category === value;
         this.setState({ chooseCategory: category });
