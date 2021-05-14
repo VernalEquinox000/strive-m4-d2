@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -6,6 +6,7 @@ import {
   Col,
   Card,
   DropdownButton,
+  Button,
 } from "react-bootstrap";
 import Fantasy from "../json/fantasy.json";
 import History from "../json/history.json";
@@ -32,8 +33,12 @@ export default function LatestRelease() {
     else if (category === "Scifi") setBooks(Scifi);
     else alert("no books selected");
   }
-
-  function handleChange(e) {
+  let [url, setUrl] = useState(["https://pokeapi.co/api/v2/pokemon/"]);
+  let [amount, setAmount] = useState(0);
+  let [pokemons, setPokemons] = useState([]);
+  let [next, setNext] = useState("");
+  let [previous, setPrevious] = useState("");
+  /* function handleChange(e) {
     setCategory(e.target.value);
     booksChange(e.target.value);
   }
@@ -46,12 +51,17 @@ export default function LatestRelease() {
   const handleSelect = (e) => {
     setCategory(e);
     booksChange(e);
-  };
+  }; */
 
-  const fetchPokemon = async () => {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon/");
+  const fetchPokemon = async (url) => {
+    const response = await fetch(url);
     const data = await response.json();
     console.log(data);
+    setAmount(data.count);
+    setPokemons(data.results);
+    /* setNext(data.next);
+    setPrevious(data.previous); */
+    setUrl(data.next);
   };
 
   /* chooseCategory = (category) => {
@@ -61,6 +71,10 @@ export default function LatestRelease() {
   };  */
 
   /* render() { */
+
+  /*  useEffect(() => {
+    fetchPokemon(url);
+  }, [url]); */
   return (
     <>
       <Container>
@@ -85,65 +99,36 @@ export default function LatestRelease() {
                                 <option value="Scifi" onSelect={()=>this.setState({category:"Scifi"})}>scifi</option>
                         </select> */}
           {/* <Button variant="primary" onClick={() => this.chooseCategory()}>Choose your category!</Button>{' '} */}
-          <Dropdown onChange={handleChange}>
-            <Dropdown.Toggle
-              variant="primary"
-              id="dropdown-basic"
-              onSubmit={handleSubmit}
-              value={category}
-            >
-              Choose a Category
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                value="Fantasy"
-                /* onClick={(setBooks(Fantasy), setCategory("Fantasy"))} */
-              >
-                Fantasy
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="History"
-                /* onClick={(setBooks(History), setCategory("History"))} */
-              >
-                History
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Horror"
-                /* onClick={(setBooks(Horror), setCategory("Horror"))} */
-              >
-                Horror
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Romance"
-                /* onClick={(setBooks(Romance), setCategory("Romance"))} */
-              >
-                Romance
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Scifi"
-                /*  onClick={(setBooks(Scifi), setCategory("Scifi"))} */
-              >
-                Scifi
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          <DropdownButton
-            alignRight
-            title="Dropdown right"
-            id="dropdown-menu-align-right"
-            onSelect={handleSelect}
+          <h4>You have found {amount} pokemon</h4>
+          <h4
+            onClick={useEffect(() => {
+              fetchPokemon(url);
+            }, [url])}
           >
-            <Dropdown.Item eventKey="Fantasy">Fantasy</Dropdown.Item>
-            <Dropdown.Item eventKey="History">History</Dropdown.Item>
-            <Dropdown.Item eventKey="Horror">Horror</Dropdown.Item>
-            <Dropdown.Item eventKey="Romance">Romance</Dropdown.Item>
-            <Dropdown.Item eventKey="Scifi">Scifi</Dropdown.Item>
-          </DropdownButton>
-          <h4>You selected {category}</h4>)
+            List all{" "}
+          </h4>
+          {"   "} <h4>load 20</h4>
+        </Row>
+        <Row>
+          <ul>
+            {pokemons.map((poke) => (
+              <li>{poke.name}</li>
+            ))}
+          </ul>
+        </Row>
+        <Row>
+          <Button variant="primary" onClick={() => fetchPokemon(url)}>
+            Load Pokemon!
+          </Button>
+          {/* <Button variant="success" onClick={() => fetchPokemon(previous)}>
+            Previous
+          </Button>
+          <Button variant="success" onClick={() => fetchPokemon(next)}>
+            Next
+          </Button> */}
         </Row>
 
-        <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-4 text-center">
+        {/* <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-4 text-center">
           <h1>{category}</h1>
         </Row>
         <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-4 text-center">
@@ -168,7 +153,7 @@ export default function LatestRelease() {
               </Card>
             </Col>
           ))}
-        </Row>
+        </Row> */}
       </Container>
     </>
   );
