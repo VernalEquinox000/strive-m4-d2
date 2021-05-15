@@ -119,9 +119,9 @@ export default function LatestRelease() {
         <Row>
           <ul>
             {pokemons.map((poke) => (
-              <a href={poke.url}>
+              <Link to="/:pokemonId">
                 <li>{poke.name}</li>
-              </a>
+              </Link>
             ))}
           </ul>
         </Row>
