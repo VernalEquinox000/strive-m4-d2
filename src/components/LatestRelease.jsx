@@ -13,6 +13,7 @@ import History from "../json/history.json";
 import Horror from "../json/horror.json";
 import Romance from "../json/romance.json";
 import Scifi from "../json/scifi.json";
+import { Link } from "react-router-dom";
 
 let categories = ["fantasy", "history", "horror", "romance", "scifi"];
 
@@ -33,7 +34,8 @@ export default function LatestRelease() {
     else if (category === "Scifi") setBooks(Scifi);
     else alert("no books selected");
   }
-  let [url, setUrl] = useState(["https://pokeapi.co/api/v2/pokemon/"]);
+  /* let [array, setArray] = []; */
+  let [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon/?limit=1118");
   let [amount, setAmount] = useState(0);
   let [pokemons, setPokemons] = useState([]);
   let [next, setNext] = useState("");
@@ -59,10 +61,22 @@ export default function LatestRelease() {
     console.log(data);
     setAmount(data.count);
     setPokemons(data.results);
+
+    /* setArray(pokemons.concat(pokemons)); */
     /* setNext(data.next);
-    setPrevious(data.previous); */
+        setPrevious(data.previous); */
     setUrl(data.next);
   };
+
+  useEffect(() => {
+    fetchPokemon(url);
+    pokemons.sort(function (a, b) {
+      return a.name.localeCompare(b.name); //using String.prototype.localCompare()
+    });
+
+    /* array = array.concat(pokemons);
+    console.log(array); */
+  }, []);
 
   /* chooseCategory = (category) => {
         category === value;
@@ -100,19 +114,14 @@ export default function LatestRelease() {
                         </select> */}
           {/* <Button variant="primary" onClick={() => this.chooseCategory()}>Choose your category!</Button>{' '} */}
           <h4>You have found {amount} pokemon</h4>
-          <h4
-            onClick={useEffect(() => {
-              fetchPokemon(url);
-            }, [url])}
-          >
-            List all{" "}
-          </h4>
           {"   "} <h4>load 20</h4>
         </Row>
         <Row>
           <ul>
             {pokemons.map((poke) => (
-              <li>{poke.name}</li>
+              <a href={poke.url}>
+                <li>{poke.name}</li>
+              </a>
             ))}
           </ul>
         </Row>
