@@ -14,6 +14,7 @@ import Horror from "../json/horror.json";
 import Romance from "../json/romance.json";
 import Scifi from "../json/scifi.json";
 import { Link } from "react-router-dom";
+import Search from "./Search";
 
 let categories = ["fantasy", "history", "horror", "romance", "scifi"];
 
@@ -40,6 +41,8 @@ export default function LatestRelease() {
   let [pokemons, setPokemons] = useState([]);
   let [next, setNext] = useState("");
   let [previous, setPrevious] = useState("");
+  let [isInList, setIsInList] = useState(false);
+  let [myList, setMyList] = useState([]);
   /* function handleChange(e) {
     setCategory(e.target.value);
     booksChange(e.target.value);
@@ -55,12 +58,28 @@ export default function LatestRelease() {
     booksChange(e);
   }; */
 
-  const fetchPokemon = async (url) => {
+  const fetchPokemons = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
     setAmount(data.count);
-    setPokemons(data.results);
+
+    const fetchedPokemons = data.results;
+    //const sortedPokemons = fetchedPokemons.sort((a, b) => b.name - a.name);
+
+    /*   const songs = album.songs;
+    const sortData = songs.sort((a, b) => a.number - b.number);
+    album.song = sortData; */
+
+    const sortedPokemons = fetchedPokemons.sort((a, b) => {
+      if (a.name < b.name) return -1;
+      else if (a.name > b.name) return 1;
+      else return 0;
+    });
+
+    setPokemons(sortedPokemons);
+
+    console.log(sortedPokemons);
 
     /* setArray(pokemons.concat(pokemons)); */
     /* setNext(data.next);
@@ -68,15 +87,16 @@ export default function LatestRelease() {
     setUrl(data.next);
   };
 
-  useEffect(() => {
-    fetchPokemon(url);
-    pokemons.sort(function (a, b) {
-      return a.name.localeCompare(b.name); //using String.prototype.localCompare()
-    });
+  /* const sortPokemons = () => {
+    const pokemonsSorted = [...pokemons].sort(
+      (a, b) => b[pokemons[2].name] - a[pokemons[3].name]
+    );
+    setPokemons(pokemonsSorted);
+  }; */
 
-    /* array = array.concat(pokemons);
-    console.log(array); */
-  }, []);
+  /* useEffect(() => {
+    fetchPokemons(url);
+  }, []); */
 
   /* chooseCategory = (category) => {
         category === value;
@@ -114,21 +134,29 @@ export default function LatestRelease() {
                         </select> */}
           {/* <Button variant="primary" onClick={() => this.chooseCategory()}>Choose your category!</Button>{' '} */}
           <h4>You have found {amount} pokemon</h4>
-          {"   "} <h4>load 20</h4>
-        </Row>
-        <Row>
-          <ul>
-            {pokemons.map((poke) => (
-              <Link to="/:pokemonId">
-                <li>{poke.name}</li>
-              </Link>
-            ))}
-          </ul>
-        </Row>
-        <Row>
-          <Button variant="primary" onClick={() => fetchPokemon(url)}>
-            Load Pokemon!
+          {"   "}
+          <Button variant="primary" onClick={() => fetchPokemons(url)}>
+            Show All
           </Button>
+          <Button variant="secondary" onClick={() => fetchPokemons(url)}>
+            Show All
+          </Button>
+        </Row>
+        <Row>
+          {pokemons && (
+            <ul>
+              {pokemons.map((poke) => (
+                <Link to={{ pathname: `/${poke.url.slice(34, -1)}` }}>
+                  <li key={poke.url.slice(34, -1)}>
+                    {poke.name}
+                    {"  "}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          )}
+        </Row>
+        <Row>
           {/* <Button variant="success" onClick={() => fetchPokemon(previous)}>
             Previous
           </Button>
@@ -136,6 +164,7 @@ export default function LatestRelease() {
             Next
           </Button> */}
         </Row>
+        <Row>{pokemons && <Search objects={{ pokemons }} />}</Row>
 
         {/* <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-4 text-center">
           <h1>{category}</h1>
