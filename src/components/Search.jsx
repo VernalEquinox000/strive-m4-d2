@@ -10,11 +10,9 @@ export default function Search({ objects }) {
 
   const searchPokemon = () => {
     console.log("pokemons is" + objects);
-    //console.log(objects[0].name);
-
     /* const results = objects.name.filter((obj) =>
       obj.name.toLowerCase().includes(searchTerm)
-    ); 
+    );
     setSearchResults(results); */
   };
   useEffect(() => {

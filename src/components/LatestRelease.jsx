@@ -7,6 +7,7 @@ import {
   Card,
   DropdownButton,
   Button,
+  Form,
 } from "react-bootstrap";
 import Fantasy from "../json/fantasy.json";
 import History from "../json/history.json";
@@ -15,6 +16,7 @@ import Romance from "../json/romance.json";
 import Scifi from "../json/scifi.json";
 import { Link } from "react-router-dom";
 import Search from "./Search";
+import axios from "axios";
 
 let categories = ["fantasy", "history", "horror", "romance", "scifi"];
 
@@ -41,26 +43,36 @@ export default function LatestRelease() {
   let [pokemons, setPokemons] = useState([]);
   let [next, setNext] = useState("");
   let [previous, setPrevious] = useState("");
-  let [isInList, setIsInList] = useState(false);
-  let [myList, setMyList] = useState([]);
+  /* let [isInList, setIsInList] = useState(false);
+  let [myList, setMyList] = useState([]); */
+  const [checkedValues, setCheckedValues] = useState([]);
+  const handleChecked = (e) => {
+    const poke = pokemons[e.target.getAttribute("data-id")];
+    let newCheckedValues = checkedValues.filter((item) => item !== poke);
+    if (e.target.checked) newCheckedValues.push(poke);
+    setCheckedValues(newCheckedValues);
+    console.log(checkedValues);
+  };
   /* function handleChange(e) {
-    setCategory(e.target.value);
-    booksChange(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log(category);
-  }
-
-  const handleSelect = (e) => {
-    setCategory(e);
-    booksChange(e);
-  }; */
+      setCategory(e.target.value);
+      booksChange(e.target.value);
+    }
+  
+    function handleSubmit(e) {
+      e.preventDefault();
+      console.log(category);
+    }
+  
+    const handleSelect = (e) => {
+      setCategory(e);
+      booksChange(e);
+    }; */
 
   const fetchPokemons = async (url) => {
-    const response = await fetch(url);
-    const data = await response.json();
+    const response = await axios.get(url);
+    //const data = await response.json();
+    const data = await response.data;
+    console.log(data);
     //console.log(data);
     setAmount(data.count);
 
@@ -68,8 +80,8 @@ export default function LatestRelease() {
     //const sortedPokemons = fetchedPokemons.sort((a, b) => b.name - a.name);
 
     /*   const songs = album.songs;
-    const sortData = songs.sort((a, b) => a.number - b.number);
-    album.song = sortData; */
+        const sortData = songs.sort((a, b) => a.number - b.number);
+        album.song = sortData; */
 
     const sortedPokemons = fetchedPokemons.sort((a, b) => {
       if (a.name < b.name) return -1;
@@ -83,10 +95,13 @@ export default function LatestRelease() {
 
     /* setArray(pokemons.concat(pokemons)); */
     /* setNext(data.next);
-        setPrevious(data.previous); */
+            setPrevious(data.previous); */
     setUrl(data.next);
   };
 
+  /* const addToCollection = () => {
+
+    } */
   /* const sortPokemons = () => {
     const pokemonsSorted = [...pokemons].sort(
       (a, b) => b[pokemons[2].name] - a[pokemons[3].name]
@@ -143,18 +158,38 @@ export default function LatestRelease() {
           </Button>
         </Row>
         <Row>
-          {pokemons && (
-            <ul>
-              {pokemons.map((poke) => (
+          <Form>
+            <div key="default-checkbox" className="mb-3">
+              <Form.Check
+                type="checkbox"
+                id="default-checkbox"
+                label="in collection"
+              />
+            </div>
+          </Form>
+        </Row>
+        <Row>
+          {pokemons &&
+            pokemons.map((poke) => (
+              <p key={poke.url.slice(34, -1)}>
                 <Link to={{ pathname: `/${poke.url.slice(34, -1)}` }}>
-                  <li key={poke.url.slice(34, -1)}>
-                    {poke.name}
-                    {"  "}
-                  </li>
+                  {poke.name}
+                  {"  "}
                 </Link>
-              ))}
-            </ul>
-          )}
+                <Form>
+                  <div //key={poke.url.slice(34, -1)}
+                    className="mb-3"
+                  >
+                    <Form.Check
+                      type="checkbox"
+                      data-id={poke.url.slice(34, -1)}
+                      label="in collection"
+                      onClick={handleChecked}
+                    />
+                  </div>
+                </Form>
+              </p>
+            ))}
         </Row>
         <Row>
           {/* <Button variant="success" onClick={() => fetchPokemon(previous)}>
@@ -164,7 +199,7 @@ export default function LatestRelease() {
             Next
           </Button> */}
         </Row>
-        <Row>{pokemons && <Search objects={{ pokemons }} />}</Row>
+        <Row>{pokemons && <Search objects={pokemons} />}</Row>
 
         {/* <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-4 text-center">
           <h1>{category}</h1>
