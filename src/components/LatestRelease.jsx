@@ -1,22 +1,13 @@
-import React, { Component, useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Dropdown,
-  Col,
-  Card,
-  DropdownButton,
-  Button,
-  Form,
-} from "react-bootstrap";
+import axios from "axios";
+import React, { useState } from "react";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Fantasy from "../json/fantasy.json";
 import History from "../json/history.json";
 import Horror from "../json/horror.json";
 import Romance from "../json/romance.json";
 import Scifi from "../json/scifi.json";
-import { Link } from "react-router-dom";
 import Search from "./Search";
-import axios from "axios";
 
 let categories = ["fantasy", "history", "horror", "romance", "scifi"];
 
@@ -43,16 +34,32 @@ export default function LatestRelease() {
   let [pokemons, setPokemons] = useState([]);
   let [next, setNext] = useState("");
   let [previous, setPrevious] = useState("");
-  /* let [isInList, setIsInList] = useState(false);
-  let [myList, setMyList] = useState([]); */
+  /* let [isInList, setIsInList] = useState(false);*/
+  let [myPokemons, setMyPokemons] = useState([]);
+  let [variant, setVariant] = useState("danger");
+  let [disabled, setDisabled] = useState(false);
+  let [buttonName, setButtonName] = useState("take it!");
   const [checkedValues, setCheckedValues] = useState([]);
-  const handleChecked = (e) => {
-    const poke = pokemons[e.target.getAttribute("data-id")];
+  /* const handleChecked = (e) => {
+    const poke = pokemons[e.target.value];
     let newCheckedValues = checkedValues.filter((item) => item !== poke);
     if (e.target.checked) newCheckedValues.push(poke);
     setCheckedValues(newCheckedValues);
     console.log(checkedValues);
+  }; */
+  //let myPokemons = [];
+  const addToMyList = (obj) => {
+    const myPokemonsList = myPokemons;
+    const myPokemonList = myPokemons.push(obj);
+    setMyPokemons(myPokemonList);
+    setVariant("success");
+    setButtonName("you have it!");
+    setDisabled(true);
+    console.log(myPokemons);
   };
+
+  //const checkUrl = ()
+
   /* function handleChange(e) {
       setCategory(e.target.value);
       booksChange(e.target.value);
@@ -169,27 +176,31 @@ export default function LatestRelease() {
           </Form>
         </Row>
         <Row>
-          {pokemons &&
-            pokemons.map((poke) => (
-              <p key={poke.url.slice(34, -1)}>
-                <Link to={{ pathname: `/${poke.url.slice(34, -1)}` }}>
-                  {poke.name}
-                  {"  "}
-                </Link>
-                <Form>
-                  <div //key={poke.url.slice(34, -1)}
-                    className="mb-3"
-                  >
-                    <Form.Check
-                      type="checkbox"
-                      data-id={poke.url.slice(34, -1)}
-                      label="in collection"
-                      onClick={handleChecked}
-                    />
-                  </div>
-                </Form>
-              </p>
-            ))}
+          <Col>
+            {pokemons &&
+              pokemons
+                .map((poke) => (
+                  <p key={poke.url.slice(34, -1)}>
+                    <Link to={{ pathname: `/${poke.url.slice(34, -1)}` }}>
+                      {poke.name}
+                      {"  "}
+                    </Link>
+                    <Button
+                      variant={
+                        myPokemons.find((pk) => pk.url === poke.url)
+                          ? "danger"
+                          : "success"
+                      }
+                      value={poke.url}
+                      disabled={disabled}
+                      onClick={() => addToMyList(poke)}
+                    >
+                      {buttonName}
+                    </Button>
+                  </p>
+                ))
+                .slice(0, 200)}
+          </Col>
         </Row>
         <Row>
           {/* <Button variant="success" onClick={() => fetchPokemon(previous)}>
