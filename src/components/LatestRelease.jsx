@@ -34,7 +34,6 @@ export default function LatestRelease() {
   let [pokemons, setPokemons] = useState([]);
   let [next, setNext] = useState("");
   let [previous, setPrevious] = useState("");
-  /* let [isInList, setIsInList] = useState(false);*/
   let [myPokemons, setMyPokemons] = useState([]);
   let [variant, setVariant] = useState("danger");
   let [disabled, setDisabled] = useState(false);
@@ -49,14 +48,17 @@ export default function LatestRelease() {
   }; */
   //let myPokemons = [];
   const addToMyList = (obj) => {
-    const myPokemonsList = myPokemons;
-    const myPokemonList = myPokemons.push(obj);
-    setMyPokemons(myPokemonList);
-    setVariant("success");
+    let list = [...myPokemons];
+    list.push(obj);
+    setMyPokemons(list);
+    localStorage.setItem("myList", JSON.stringify(list));
+    /* setVariant("success");
     setButtonName("you have it!");
-    setDisabled(true);
+    setDisabled(true); */
     console.log(myPokemons);
   };
+  //localStorage.setItem("myList", JSON.stringify(array))
+  //JSON.parse(localStorage.getItem("myList"))
 
   //const checkUrl = ()
 
@@ -105,6 +107,13 @@ export default function LatestRelease() {
             setPrevious(data.previous); */
     setUrl(data.next);
   };
+
+  const isCatched = (id) =>
+    myPokemons.length > 0
+      ? myPokemons.filter((p) => p.url.slice(34, -1) === id).length > 0
+        ? true
+        : false
+      : false;
 
   /* const addToCollection = () => {
 
@@ -186,16 +195,18 @@ export default function LatestRelease() {
                       {"  "}
                     </Link>
                     <Button
-                      variant={
-                        myPokemons.find((pk) => pk.url === poke.url)
-                          ? "danger"
-                          : "success"
+                      variant /* {variant} */={
+                        isCatched(poke.url.slice(34, -1)) ? "success" : "danger"
                       }
-                      value={poke.url}
-                      disabled={disabled}
+                      value={poke.url.slice(34, -1)}
+                      disabled={
+                        isCatched(poke.url.slice(34, -1)) ? true : false
+                      }
                       onClick={() => addToMyList(poke)}
                     >
-                      {buttonName}
+                      {isCatched(poke.url.slice(34, -1))
+                        ? "You got me!"
+                        : "Catch me!"}
                     </Button>
                   </p>
                 ))
