@@ -189,7 +189,7 @@ export default function LatestRelease() {
             {pokemons &&
               pokemons
                 .map((poke) => (
-                  <p key={poke.url.slice(34, -1)}>
+                  <p className="pokelist" key={poke.url.slice(34, -1)}>
                     <Link to={{ pathname: `/${poke.url.slice(34, -1)}` }}>
                       {poke.name}
                       {"  "}
